@@ -9,7 +9,6 @@ import simpleaudio as sa
 from scipy.io.wavfile import read
 from pydub import AudioSegment
 from concurrent.futures import ThreadPoolExecutor
-from memory_profiler import profile
 
 # 设置音频文件存储目录
 config_path = 'parse.ini'  # 解析音符和文件名的配置文件
@@ -170,7 +169,6 @@ class NotePlayer:
 
 
 # 主程序
-@profile(precision=5)
 def performance():
     # 读取音符和对应的音频文件
     notes = load_notes_from_config(config_path, notes_directory)
