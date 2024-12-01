@@ -1,3 +1,4 @@
+import random
 import threading
 import keyboard
 import pygame
@@ -17,24 +18,40 @@ note_names = [
 
 
 def init():
-    global stop_flag, index, current_sound
-    pygame.init()
-    pygame.mixer.init()
+    global press_count, event_stack, stack_lock
+    global stop_flag, current_sound, index
+    global press_flag, rhythm, score
+
+    press_count = 50
+    event_stack = []
+    stack_lock = threading.Lock()
 
     stop_flag = False
-    index = 0 + note_names.index('D6')
     current_sound = pygame.mixer.Sound('sample/D6.mp3')
+    index = 0 + note_names.index('D6')
+
+    press_flag = False
+    rhythm = 0.5
+    score = 0
+
+
+def get_rhythm():
+    global rhythm
+    rhythm = round(random.random(), 2)
+    print(rhythm)
+    return rhythm
 
 
 def play(note):
-    global current_sound, current_thread
+    global current_sound, rhythm
     if current_sound:
+        rhythm = get_rhythm()
+        time.sleep(rhythm)
         current_sound.stop()
     file = str('sample/{}.mp3'.format(note))
     current_sound = pygame.mixer.Sound(file)
-
     current_sound.play(loops=0, maxtime=0, fade_ms=0)
-    print("Playing", file)
+    # print(file)
 
 
 def stop_audio():
@@ -44,31 +61,102 @@ def stop_audio():
         print("Stopped")
 
 
-def key_event_handler():
-    global stop_flag, index
+# def key_event_handler():
+#     global stop_flag, index
+#
+#     while True:
+#         # if keyboard.is_pressed('a'):
+#         event = keyboard.read_event()
+#         key = event.name
+#         print(event.event_type)
+#
+#         if key == 'esc':
+#             pygame.mixer.quit()
+#             exit(0)
+#
+#         if event.event_type == 'down':
+#             if not stop_flag:
+#                 stop_flag = True
+#                 threading.Timer(0, play, args=(note_names[index],)).start()
+#                 # index = (index + 1) % len(note_names)
+#                 index = random.randint(0, len(note_names) - 1)
+#         elif event.event_type == 'up':
+#             stop_flag = False
+
+
+def playback():
+    global press_count, event_stack, index, score
+
     while True:
-        if keyboard.is_pressed('a'):
-            if not stop_flag:
-                stop_flag = True
-                play(note_names[index])
-                threading.Timer(1.8, stop_audio).start()
-                index = (index + 1) % len(note_names)
-        elif not keyboard.is_pressed('a') and stop_flag:
-            stop_flag = False
-        time.sleep(0.1)
+        with stack_lock:
+            if press_count > 0:
+                note = note_names[index]
+                # index = (index + 1) % len(note_names)
+                index = random.randint(0, len(note_names) - 1)
+                press_count -= 1
+            else:
+                note = None
+
+        if note:
+            print("Playing", note, press_count, "Score:", score)
+            play(note)
+
+        time.sleep(0.05)
+
+def key_event_handler():
+    global event_stack, stack_lock, press_count
+    global press_flag, score
+
+    while True:
+        # if keyboard.is_pressed('a'):
+        event = keyboard.read_event()
+        key = event.name
+        print(event.event_type, score)
+
+        if key == 'esc':
+            pygame.mixer.quit()
+            exit(0)
+
+        if event.event_type == 'down' and press_flag == False:
+            with stack_lock:
+                press_flag = True
+        elif event.event_type == 'up' and press_flag == True:
+            with stack_lock:
+                press_flag = False
+                press_count += 1
+                score += 1
 
 
-if __name__ == '__main__':
+def performance():
     init()
-    event_thread = threading.Thread(target=key_event_handler)
-    event_thread.daemon = True
-    event_thread.start()
-
+    threading.Thread(target=playback, daemon=True).start()
+    threading.Thread(target=key_event_handler, daemon=True).start()
     try:
         while True:
             time.sleep(1)
     except KeyboardInterrupt:
-        print('terminated.')
+        print("Terminated.")
+
+# if __name__ == '__main__':
+#     init()
+#     # keyboard.hook(key_event_handler)
+#     # event_thread = threading.Thread(target=key_event_handler)
+#     # event_thread.daemon = True
+#     # event_thread.start()
+#
+#     playback = threading.Thread(target=playback)
+#     playback.daemon = True
+#     playback.start()
+#
+#     event_thread = threading.Thread(target=key_event_handler)
+#     event_thread.daemon = True
+#     event_thread.start()
+#
+#     try:
+#         while True:
+#             time.sleep(1)
+#     except KeyboardInterrupt:
+#         print('terminated.')
 
 
 
