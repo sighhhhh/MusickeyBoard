@@ -16,6 +16,8 @@ note_names = [
     'A7', 'Bb7', 'B7', 'C8'
 ]
 
+beat = (0.25, 0.3, 0.5, 1)
+
 
 def init():
     global press_count, event_stack, stack_lock
@@ -37,7 +39,7 @@ def init():
 
 def get_rhythm():
     global rhythm
-    rhythm = round(random.random(), 2)
+    rhythm = beat[random.randint(0, len(beat)-1)]
     print(rhythm)
     return rhythm
 
@@ -91,8 +93,8 @@ def playback():
         with stack_lock:
             if press_count > 0:
                 note = note_names[index]
-                # index = (index + 1) % len(note_names)
-                index = random.randint(0, len(note_names) - 1)
+                index = (index + 1) % len(note_names)
+                # index = random.randint(0, len(note_names) - 1)
                 press_count -= 1
             else:
                 note = None
@@ -101,7 +103,7 @@ def playback():
             print("Playing", note, press_count, "Score:", score)
             play(note)
 
-        time.sleep(0.05)
+        # time.sleep(0.05)
 
 def key_event_handler():
     global event_stack, stack_lock, press_count
