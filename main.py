@@ -1,6 +1,6 @@
 import pygame
 import analysis
-import performance
+# import performance
 import tuning
 import play
 

@@ -16,6 +16,7 @@ note_names = [
     'A7', 'Bb7', 'B7', 'C8'
 ]
 
+bpm = 120
 beat = (0.25, 0.3, 0.5, 1)
 
 
@@ -24,7 +25,8 @@ def init():
     global stop_flag, current_sound, index
     global press_flag, rhythm, score
 
-    press_count = 50
+    # 开启音效
+    press_count = 10
     event_stack = []
     stack_lock = threading.Lock()
 
@@ -39,7 +41,13 @@ def init():
 
 def get_rhythm():
     global rhythm
-    rhythm = beat[random.randint(0, len(beat)-1)]
+
+    # 默认节拍
+    rhythm = beat[2]
+
+    # 随机节拍
+    # rhythm = beat[random.randint(0, len(beat)-1)]
+
     print(rhythm)
     return rhythm
 
@@ -93,7 +101,9 @@ def playback():
         with stack_lock:
             if press_count > 0:
                 note = note_names[index]
+                # 递增旋律
                 index = (index + 1) % len(note_names)
+                # 随机旋律
                 # index = random.randint(0, len(note_names) - 1)
                 press_count -= 1
             else:

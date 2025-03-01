@@ -1,0 +1,74 @@
+[
+  {
+    "metadata": {
+      "title": "茉莉花",
+      "composer": "中国传统民歌",
+      "key": "C大调",
+      "tempo": 80
+    },
+    "bars": [
+        {
+        "bar_index": 0,
+        "notes": [
+          {"pitch": "E4", "duration": 0.25},
+          {"pitch": "E4", "duration": 0.25},
+          {"pitch": "G4", "duration": 0.25},
+          {"pitch": "A4", "duration": 0.25},
+          {"pitch": "G4", "duration": 0.25},
+          {"pitch": "A4", "duration": 0.25},
+          {"pitch": "C5", "duration": 0.25},
+          {"pitch": "A4", "duration": 0.125},
+          {"pitch": "G4", "duration": 0.125}
+        ]
+      },
+      {
+        "bar_index": 1,
+        "notes": [
+          {"pitch": "G4", "duration": 0.25},
+          {"pitch": "E4", "duration": 0.125},
+          {"pitch": "D4", "duration": 0.125},
+          {"pitch": "E4", "duration": 0.25},
+          {"pitch": "G4", "duration": 0.25},
+          {"pitch": "D4", "duration": 0.125},
+          {"pitch": "E4", "duration": 0.125},
+          {"pitch": "D4", "duration": 0.125},
+          {"pitch": "C4", "duration": 0.125},
+          {"pitch": "A3", "duration": 0.5}
+        ]
+      }
+    ]
+  },
+  {
+    "metadata": {
+      "title": "梁祝主题",
+      "composer": "何占豪、陈钢",
+      "key": "C大调",
+      "tempo": 60
+    },
+    "bars": [
+      {
+      "bar_index": 0,
+      "notes": [
+        {"pitch": "C4", "duration": 0.5},
+        {"pitch": "E4", "duration": 0.5},
+        {"pitch": "G4", "duration": 0.25},
+        {"pitch": "A4", "duration": 0.25},
+        {"pitch": "B4", "duration": 0.5}
+      ]
+    },
+    {
+      "bar_index": 1,
+      "notes": [
+        {"pitch": "A4", "duration": 0.25},
+        {"pitch": "G4", "duration": 0.25},
+        {"pitch": "E4", "duration": 0.25},
+        {"pitch": "G4", "duration": 0.25},
+        {"pitch": "A4", "duration": 0.25},
+        {"pitch": "G4", "duration": 0.125},
+        {"pitch": "E4", "duration": 0.125},
+        {"pitch": "D4", "duration": 0.5}
+      ]
+    }
+    ]
+  }
+]
